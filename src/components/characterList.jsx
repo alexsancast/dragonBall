@@ -4,6 +4,27 @@ import { Character } from "./characters";
 
 export default function CharacterList() {
   const [characters, setCharacters] = useState([]);
+  const [search, setsearch] = useState("");
+  const [results, setresults] = useState([]);
+  const [value, setvalue] = useState(true);
+
+  const filter = (worlds) => {
+    let datos = results.filter((data) => {
+      if (data.name.toLowerCase().includes(worlds.toLowerCase())) {
+        return data;
+      } else {
+        setvalue(false);
+      }
+    });
+    setCharacters(datos);
+  };
+
+  const seacher = (e) => {
+    setsearch(e.target.value);
+    filter(e.target.value);
+  };
+  //Aqui estoy validando si esta vacio el input
+
   useEffect(() => {
     async function getData() {
       const getApi = await fetch(
@@ -11,18 +32,30 @@ export default function CharacterList() {
       );
       const data = await getApi.json();
       setCharacters(data);
+      setresults(data);
     }
 
     getData();
   }, []);
 
   return (
-    <div className="container bg-danger">
+    <div className="container">
+      <input
+        value={search}
+        placeholder="Search..."
+        onChange={seacher}
+        className="form-control"
+        type="text"
+      />
+
       <div className="row">
         {characters.map((character) => {
           return (
             <div key={character.id} className="col-md-4">
-              <Character character={character} />
+              
+             <Character character={character} />
+              
+            
             </div>
           );
         })}
