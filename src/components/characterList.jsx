@@ -12,10 +12,13 @@ export default function CharacterList() {
     let datos = results.filter((data) => {
       if (data.name.toLowerCase().includes(worlds.toLowerCase())) {
         return data;
-      } else {
-        setvalue(false);
       }
     });
+    if (datos.length == 0) {
+      setvalue(false);
+    } else {
+      setvalue(true);
+    }
     setCharacters(datos);
   };
 
@@ -44,22 +47,21 @@ export default function CharacterList() {
         value={search}
         placeholder="Search..."
         onChange={seacher}
-        className="form-control"
+        className="form-control input-sm"
         type="text"
       />
+        {value ?  <div className="row">
+       
 
-      <div className="row">
-        {characters.map((character) => {
-          return (
-            <div key={character.id} className="col-md-4">
-              
+       {characters.map((character) => {
+         return (
+           <div key={character.id} className="col-md-4">
              <Character character={character} />
-              
-            
-            </div>
-          );
-        })}
-      </div>
+           </div>
+         );
+       })}
+     </div> :<div className="bg-dark">Busqueda no encontrada</div> }
+     
     </div>
   );
 }
